@@ -1,4 +1,4 @@
-public interface Iter{
+public interface Iter<A>{
 	
 	public void next();
 	

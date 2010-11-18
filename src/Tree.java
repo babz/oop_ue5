@@ -7,7 +7,7 @@
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-public class Tree{
+public class Tree<A>{
 	
 	//enthält nur Wurzel ohne Kanten
 	public Tree(){
@@ -26,7 +26,7 @@ public class Tree{
 	 * Jeder Aufruf von assoc (sowohl in Instanzen von Tree als auch in Iteratoren) erzeugt einen 
 	 * neuen Iterator.
 	 */
-	public Iterator assoc(){
+	public Iter<AssocIter> assoc(){
 		return null;
 	}
 	
@@ -39,7 +39,6 @@ public class Tree{
 	 * wie sie von durch assoc erzeugten Iteratoren zurückgegeben werden. Die Methode allLabels ist 
 	 * beim Testen hilfreich.
 	 */
-	public Iterator<Iter> allLabels(){
-		return null;
+	public A allLabels(){
 	}
 }

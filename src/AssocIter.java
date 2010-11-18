@@ -1,4 +1,4 @@
-public interface AssocIter <A> extends Iter{
+public interface AssocIter <A> extends Iter<A>{
 	
 	/* assoc liefert ein Objekt zurück, das mit dem zuletzt von 
 	 * next zurückgegebenen Element assoziiert ist. Das Ergebnis

@@ -40,5 +40,6 @@ public class Tree<A>{
 	 * beim Testen hilfreich.
 	 */
 	public A allLabels(){
+		return null;
 	}
 }

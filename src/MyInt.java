@@ -8,7 +8,7 @@ public class MyInt {
 	
 	//vergleicht die Zahlen
 	public int compareTo(int j){
-		
+		return 0;
 	}
 	
 	public String toString(){

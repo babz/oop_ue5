@@ -34,7 +34,8 @@ public class Tree<A>{
 	 * neuen Iterator.
 	 */
 	public AssocIter<A> assoc(){
-		return null;
+		
+		return new Iterator<A>(root).assoc();
 	}
 	
 	/*
@@ -47,6 +48,13 @@ public class Tree<A>{
 	 * beim Testen hilfreich.
 	 */
 	public A allLabels(){
+		Iter<A> iter;
+		A cur;
+		iter = root.assoc();
+		while(iter.hasNext()){
+			cur = iter.next();
+			return cur;
+		}
 		return null;
 	}
 	
@@ -67,23 +75,23 @@ public class Tree<A>{
 		public A getElem(){
 			return elem;
 		}
+		
 		public Iter<A> assoc(){
-			if(subNodes == null)return null;
-			else return subNodes.assoc();
+			//kann auch null returnen
+			return subNodes.assoc();
 		}
 	}
 	
-	private class AssocIterator<A> implements AssocIter<A>{
-
+	private class Iterator<A> implements AssocIter<A>{
+		private Node<A> start;
+		
+		public Iterator(Node<A> s){
+			this.start = s;
+		}
+		
 		public A next(){
-/*			A temp;
-			if(pos==null) return null;
-			A elem = (A) pos.getElem();//nur als test - eig nicht erlaubt zu casten
-			pos = pos.next();
-			return pos;
-*/
-			//wieso geht des net?
-			return pos.assoc().next();
+
+			return start.assoc().next();
 			
 		}
 		
@@ -92,7 +100,7 @@ public class Tree<A>{
 		}
 		
 		public AssocIter<A> assoc(){
-			AssocIterator<A> ret = new AssocIterator();
+			Iterator<A> ret = new Iterator<A>(start);
 			return ret;
 			
 		}

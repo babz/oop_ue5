@@ -1,4 +1,3 @@
-
 /*
  * gibt direkten Zugriff auf einen Wert des Aggregats
  * (durch einen weiteren Typparameter bestimmten Typs)

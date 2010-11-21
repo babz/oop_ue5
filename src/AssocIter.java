@@ -1,25 +1,25 @@
 public interface AssocIter <A> extends Iter<A>{
 	
-	/* assoc liefert ein Objekt zurück, das mit dem zuletzt von 
-	 * next zurückgegebenen Element assoziiert ist. Das Ergebnis
+	/* assoc liefert ein Objekt zurï¿½ck, das mit dem zuletzt von 
+	 * next zurï¿½ckgegebenen Element assoziiert ist. Das Ergebnis
 	 *  ist null wenn noch kein Aufruf von next erfolgt ist oder 
 	 *  der letzte Aufruf von next ebenso null geliefert hat.
 	 */
-	public A assoc();
+	public Iter<A> assoc();
 	
 
-	/* insert kann ein neues Element (an nicht näher definierter 
+	/* insert kann ein neues Element (an nicht nï¿½her definierter 
 	 * Stelle und ohne Angabe assoziierter Objekte) in das Aggregat 
-	 * einfügen, über das iteriert wird. Das Ergebnis eines Aufrufs 
-	 * ist true wenn das Element tatsächlich eingefügt wurde, sonst false. 
+	 * einfï¿½gen, ï¿½ber das iteriert wird. Das Ergebnis eines Aufrufs 
+	 * ist true wenn das Element tatsï¿½chlich eingefï¿½gt wurde, sonst false. 
 	 */
-	public A insert();
+	public void insert(A a);
 	
 	
-	/*delete entfernt das zuletzt von next zurückgegebe Element aus dem Aggregat. 
-	 * Das Aggregat bleibt unverändert, wenn zuvor kein Element von next 
-	 * zurückgegeben wurde oder das Element schon entfernt ist. 
-	 * Das Ergebnis eines Aufrufs ist true wenn tatsächlich ein Element entfernt 
+	/*delete entfernt das zuletzt von next zurï¿½ckgegebe Element aus dem Aggregat. 
+	 * Das Aggregat bleibt unverï¿½ndert, wenn zuvor kein Element von next 
+	 * zurï¿½ckgegeben wurde oder das Element schon entfernt ist. 
+	 * Das Ergebnis eines Aufrufs ist true wenn tatsï¿½chlich ein Element entfernt 
 	 * wurde, sonst false. 
 	 */
 	public void delete(A a);

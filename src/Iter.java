@@ -1,6 +1,6 @@
 public interface Iter<A>{
 	
-	public void next();
+	public A next();
 	
 	public boolean hasNext();
 	

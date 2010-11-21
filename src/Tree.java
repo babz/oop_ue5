@@ -8,11 +8,18 @@
  * Knoten ausgehenden Kanten iterieren.
  */
 public class Tree<A>{
-	
-	//enthält nur Wurzel ohne Kanten
+
+	private Node<A> head = null;
+	private Node<A> tail = null;
+	private Node<A> root;
+	private Node<A> pos;
+
+	//root
 	public Tree(){
-		
+		root = new Node<A>(null);
+		pos = root;
 	}
+	
 	
 	/*
 	 * retourniert einen Iterator des Typs AssocIter (mit geeigneten Typparameterersetzungen), 
@@ -26,7 +33,7 @@ public class Tree<A>{
 	 * Jeder Aufruf von assoc (sowohl in Instanzen von Tree als auch in Iteratoren) erzeugt einen 
 	 * neuen Iterator.
 	 */
-	public Iter<AssocIter> assoc(){
+	public AssocIter<A> assoc(){
 		return null;
 	}
 	
@@ -41,5 +48,62 @@ public class Tree<A>{
 	 */
 	public A allLabels(){
 		return null;
+	}
+	
+	private class Node<A>implements TreeCollection<A>{
+		private subNodeList<A> subNodes;
+		private A elem;
+		
+		
+		public Node(A a){
+			this.elem = a;
+			
+		}
+		
+		public void addNode(A a){
+			subNodes.addNode(a);
+		}
+		
+		public A getElem(){
+			return elem;
+		}
+		public Iter<A> assoc(){
+			if(subNodes == null)return null;
+			else return subNodes.assoc();
+		}
+	}
+	
+	private class AssocIterator<A> implements AssocIter<A>{
+
+		public A next(){
+/*			A temp;
+			if(pos==null) return null;
+			A elem = (A) pos.getElem();//nur als test - eig nicht erlaubt zu casten
+			pos = pos.next();
+			return pos;
+*/
+			//wieso geht des net?
+			return pos.assoc().next();
+			
+		}
+		
+		public boolean hasNext(){
+			return pos != null;
+		}
+		
+		public AssocIter<A> assoc(){
+			AssocIterator<A> ret = new AssocIterator();
+			return ret;
+			
+		}
+		
+		public void insert(A a){
+			
+		}
+		
+		public void delete(A a){
+			
+		}
+		
 	}
 }

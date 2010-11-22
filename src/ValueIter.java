@@ -7,6 +7,7 @@ public interface ValueIter <A> extends AssocIter<A>{
 	 * setzt den Wert im Aggregat auf den Parameter von set (
 	 * unabhängig vom Zustand des Iterators)
 	 */
+	//pre: a is not null
 	public void set(A a);
 	
 	/*

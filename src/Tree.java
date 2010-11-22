@@ -7,7 +7,7 @@
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-public class Tree<EdgeType, NodeType> {
+public class Tree<EdgeType extends Comparable, NodeType> {
 	public final NodeType value;
 	private LinkedList<Node> children;
 	

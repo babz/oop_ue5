@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 /*
  * Eine Instanz der Klasse Tree stellt einen baumförmigen gerichteten Graphen dar, 
  * in dem von jedem Knoten beliebig viele, mit einem Label versehene Kanten ausgehen. 
@@ -7,16 +9,49 @@
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-public class Tree<EdgeType extends Comparable, NodeType> {
-	public final NodeType value;
+public class Tree<LabelType extends Comparable> {
 	private LinkedList<Node> children;
+
+	public Tree() {
+		this.children = new LinkedList<Node>();		
+	}
 	
-	public Tree(NodeType value, LinkedList<Node> children) {
-		this.value = value;
-		if (children == null){
-			 this.children = new LinkedList<Node>();
-		}
+	public Tree(LinkedList<Node> children) {
 		this.children = children;
+	}
+	
+	public class Iterator implements AssocIter<LabelType, Iterator> {
+		
+		@Override
+		public LabelType next() throws NoSuchElementException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public Iterator assoc() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean insert(LabelType a) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean delete() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
 	}
 
 	/*
@@ -31,7 +66,7 @@ public class Tree<EdgeType extends Comparable, NodeType> {
 	 * Jeder Aufruf von assoc (sowohl in Instanzen von Tree als auch in Iteratoren) erzeugt einen 
 	 * neuen Iterator.
 	 */
-	public AssocIter<NodeType, EdgeType> assoc(){
+	public Iterator assoc(){
 		assert false;
 		return null;
 	}
@@ -45,15 +80,15 @@ public class Tree<EdgeType extends Comparable, NodeType> {
 	 * wie sie von durch assoc erzeugten Iteratoren zurückgegeben werden. Die Methode allLabels ist 
 	 * beim Testen hilfreich.
 	 */
-	public NodeType allLabels(){
+	public Iterator allLabels(){
 		assert false;
 		return null;
 	}
 	
 	private class Node {
-		public final EdgeType edge;
-		public final Tree<EdgeType, NodeType> child;
-		public Node(EdgeType edge, Tree<EdgeType, NodeType> child) {
+		public final LabelType edge;
+		public final Tree<LabelType> child;
+		public Node(LabelType edge, Tree<LabelType> child) {
 			this.edge = edge;
 			this.child = child;
 		}

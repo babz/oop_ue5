@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 public class LinkedList<T> {
 	private Item start = null;
 	
-	public ValueIter<T> iterate() {
+	public ValueIter<T, ?> iterate() {
 		return new Iterator(null, null);
 	}
 
@@ -16,20 +16,20 @@ public class LinkedList<T> {
 			this.data = data;
 		}
 	}
-	private class Iterator implements ValueIter<T> {
+	private class Iterator implements ValueIter<T, Object> {
 		private Item cur, prev;
 		Iterator(Item cur, Item prev) {
 			this.cur = cur;
 			this.prev = prev;
 		}
 		@Override
-		public AssocIter<T> assoc() {
-			return new Iterator(cur, prev);
+		public Object assoc() {
+			return null;
 		}
 
 		//pre: a is not null
 		@Override
-		public void insert(T a) {
+		public boolean insert(T a) {
 			Item n = new Item(a);
 			n.next = start;
 			if (cur == null || prev == null){
@@ -38,20 +38,24 @@ public class LinkedList<T> {
 				prev.next = n;
 			}
 			cur = n;
+			return true;
 		}
 
 		@Override
-		public void delete() {
+		public boolean delete() {
 			if (cur == null){
-				return;
+				return false;
 			} else if (prev == null){
 				// at start
-				if (start != null) {
+				if (start == null) {
+					return false;
+				} else {
 					start = start.next;
 				}
 			} else {
 				prev.next = cur.next;
 			}
+			return true;
 		}
 
 		@Override

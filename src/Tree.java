@@ -7,20 +7,18 @@
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-public class Tree<A>{
-
-	private Node<A> head = null;
-	private Node<A> tail = null;
-	private Node<A> root;
-	private Node<A> pos;
-
-	//root
-	public Tree(){
-		root = new Node<A>(null);
-		pos = root;
+public class Tree<EdgeType, NodeType> {
+	public final NodeType value;
+	private LinkedList<Node> children;
+	
+	public Tree(NodeType value, LinkedList<Node> children) {
+		this.value = value;
+		if (children == null){
+			 this.children = new LinkedList<Node>();
+		}
+		this.children = children;
 	}
-	
-	
+
 	/*
 	 * retourniert einen Iterator des Typs AssocIter (mit geeigneten Typparameterersetzungen), 
 	 * der über die Label aller von der Wurzel des Baums ausgehenden Kanten in aufsteigender 
@@ -33,9 +31,9 @@ public class Tree<A>{
 	 * Jeder Aufruf von assoc (sowohl in Instanzen von Tree als auch in Iteratoren) erzeugt einen 
 	 * neuen Iterator.
 	 */
-	public AssocIter<A> assoc(){
-		
-		return new Iterator<A>(root).assoc();
+	public AssocIter<NodeType, EdgeType> assoc(){
+		assert false;
+		return null;
 	}
 	
 	/*
@@ -47,71 +45,18 @@ public class Tree<A>{
 	 * wie sie von durch assoc erzeugten Iteratoren zurückgegeben werden. Die Methode allLabels ist 
 	 * beim Testen hilfreich.
 	 */
-	public A allLabels(){
-		Iter<A> iter;
-		A cur;
-		iter = root.assoc();
-		while(iter.hasNext()){
-			cur = iter.next();
-			return cur;
-		}
+	public NodeType allLabels(){
+		assert false;
 		return null;
 	}
 	
-	private class Node<A>implements TreeCollection<A>{
-		private subNodeList<A> subNodes;
-		private A elem;
-		
-		
-		public Node(A a){
-			this.elem = a;
-			
+	private class Node {
+		public final EdgeType edge;
+		public final Tree<EdgeType, NodeType> child;
+		public Node(EdgeType edge, Tree<EdgeType, NodeType> child) {
+			this.edge = edge;
+			this.child = child;
 		}
-		
-		public void addNode(A a){
-			subNodes.addNode(a);
-		}
-		
-		public A getElem(){
-			return elem;
-		}
-		
-		public Iter<A> assoc(){
-			//kann auch null returnen
-			return subNodes.assoc();
-		}
-	}
-	
-	private class Iterator<A> implements AssocIter<A>{
-		private Node<A> start;
-		
-		public Iterator(Node<A> s){
-			this.start = s;
-		}
-		
-		public A next(){
 
-			return start.assoc().next();
-			
-		}
-		
-		public boolean hasNext(){
-			return pos != null;
-		}
-		
-		public AssocIter<A> assoc(){
-			Iterator<A> ret = new Iterator<A>(start);
-			return ret;
-			
-		}
-		
-		public void insert(A a){
-			
-		}
-		
-		public void delete(A a){
-			
-		}
-		
 	}
 }

@@ -99,8 +99,8 @@ public class Tree<A>{
 			return pos != null;
 		}
 		
-		public AssocIter<A> assoc(){
-			Iterator<A> ret = new Iterator<A>(start);
+		public Iter<A> assoc(){
+			Iterator<A> ret = new Iterater<A>(start);
 			return ret;
 			
 		}

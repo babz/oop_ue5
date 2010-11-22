@@ -1,6 +1,6 @@
 public abstract class Descriptor{
 	
-	protected String s;
+	private String s;
 	
 	public Descriptor(String s){
 	}

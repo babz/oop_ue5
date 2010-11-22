@@ -1,5 +1,4 @@
-public class ADescriptor extends Descriptor{
-	
+public class ADescriptor extends Descriptor{	
 	public ADescriptor(String s){
 		super(s);
 	}
@@ -8,7 +7,14 @@ public class ADescriptor extends Descriptor{
 	 * gibt Anzahl aller Vorkommen der Buchstaben "a" und "A" im String zurück
 	 */
 	public int as(){
-		return 0;
+		String f = toString();
+		int count = 0; 
+		for(int i=0;i<f.length();i++){
+			if (Character.toLowerCase(f.charAt(i)) == 'b') {
+				count++;
+			}
+		}
+		return count;
 	}
 	
 	

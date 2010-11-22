@@ -5,6 +5,7 @@ public class BDescriptor extends Descriptor{
 	}
 	 
 	public boolean bs(){
-		return false;
+		String f = toString();
+		return f.indexOf('b') != -1 || f.indexOf('B') != -1;
 	}
 }

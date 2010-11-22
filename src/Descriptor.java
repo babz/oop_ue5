@@ -1,12 +1,12 @@
-public abstract class Descriptor{
+public abstract class Descriptor implements Comparable<Descriptor>{
 	
 	private String s;
 	
 	public Descriptor(String s){
 	}
 	
-	public boolean compareTo(Descriptor d){
-		return false;
+	public int compareTo(Descriptor d){
+		return s.compareTo(d.s);
 	}
 	
 	public String toString(){

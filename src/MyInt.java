@@ -1,17 +1,16 @@
-public class MyInt {
+public class MyInt implements Comparable<MyInt>{
 	
-	private int i;
-	
+	private Integer i;
 	public MyInt(int i){
 		this.i = i;
 	}
 	
 	//vergleicht die Zahlen
-	public int compareTo(int j){
-		return 0;
+	public int compareTo(MyInt other){
+		return i.compareTo(other.i);
 	}
 	
 	public String toString(){
-		return i + "";
+		return i.toString();
 	}
 }

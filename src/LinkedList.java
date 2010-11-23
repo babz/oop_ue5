@@ -2,114 +2,73 @@ import java.util.NoSuchElementException;
 
 
 public class LinkedList<T> {
+	public LinkedList(){
+	}
 	private Item start = null;
 	
-	public ValueIter<T, ?> iterate() {
+	public Iterator iterate() {
 		return new Iterator(null, null);
 	}
 
-	private class Item {
-		Item next = null;
+	public class Item {
+		Item next;
 		public final T data;
-		Item(T data){
+		protected Item(T data, Item next){
 			assert data != null;
 			this.data = data;
+			this.next = next;
 		}
 	}
-	private class Iterator implements ValueIter<T, Object> {
-		private Item cur, prev;
-		Iterator(Item cur, Item prev) {
-			this.cur = cur;
-			this.prev = prev;
-		}
-		@Override
-		public Object assoc() {
-			return null;
-		}
-
-		//pre: a is not null
-		@Override
-		public boolean insert(T a) {
-			Item n = new Item(a);
-			n.next = start;
-			if (cur == null || prev == null){
-				start = n;
-			} else {
-				prev.next = n;
-			}
-			cur = n;
-			return true;
+	
+	public class Iterator extends AIterator<Item, T, T, T> {
+		private Iterator(Item cur, Item prev) {
+			super(cur, prev);
 		}
 
 		@Override
-		public boolean delete() {
-			if (cur == null){
-				return false;
-			} else if (prev == null){
-				// at start
-				if (start == null) {
-					return false;
-				} else {
-					start = start.next;
-				}
-			} else {
-				prev.next = cur.next;
-			}
-			return true;
+		protected T getValue(Item here) {
+			return here.data;
 		}
 
 		@Override
-		public T next() {
-			if (cur == null) {
-				if (start == null) {
-					throw new NoSuchElementException();
-				}
-				cur = start;
-			} else {
-				if (cur.next == null) {
-					// end of list
-					throw new NoSuchElementException();
-				}
-				cur = cur.next;
-				prev = cur;
-			}
-			return cur.data;
+		protected Item getStart() {
+			return start;
 		}
 
 		@Override
-		public boolean hasNext() {
-			if (cur == null) {
-				return start != null;
-			}
-			return cur.next != null;
-		}
-
-		//pre: a is not null
-		@Override
-		public void set(T a) {
-			Item n = new Item(a);
-			if (cur == null || prev == null){
-				if (start != null) {
-					n.next = start.next;
-				}
-				start = n;
-				cur = n;
-				return;
-			}
-			n.next = cur.next;
-			prev.next = n;
-			cur = n;
+		protected void setStart(Item start) {
+			LinkedList.this.start = start;
 		}
 
 		@Override
-		public T get() {
-			if (cur == null) {
-				// iterator at beginning, raise IllegalState?
-				return null;
-			}
-			return cur.data;
+		protected Item getNext(Item here) {
+			return here.next;
+		}
+
+		@Override
+		protected void setNext(Item here, Item next) {
+			here.next = next;
+		}
+
+		@Override
+		protected T getAssoc(Item here) {
+			return getValue(here);
+		}
+
+		@Override
+		protected T getNode(Item here) {
+			return here.data;
+		}
+
+		@Override
+		protected Item createValue(T v, Item next) {
+			return new Item(v, next);
+		}
+
+		@Override
+		protected Item createNode(T n, Item next) {
+			return new Item(n, next);
 		}
 		
 	}
-	
 }

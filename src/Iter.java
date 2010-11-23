@@ -1,8 +1,8 @@
 import java.util.NoSuchElementException;
 
-public interface Iter<A>{
+public interface Iter<Node>{
 	
-	public A next() throws NoSuchElementException;
+	public Node next() throws NoSuchElementException;
 	
 	public boolean hasNext();
 	

@@ -141,8 +141,6 @@ public class Test{
 		 * von Knoten aus. 
 		 */
 		
-		ValueTree tree2;
-		
 		ADescriptor ades1 = new ADescriptor("Herwig isst Schokolade");
 		ADescriptor ades2 = new ADescriptor("Alle Kinder moegen Schokolade");
 		ADescriptor ades3 = new ADescriptor("Am besten ist aber Kinder Schokolade");
@@ -164,6 +162,11 @@ public class Test{
 		boolean bbool2 = false;
 		boolean bbool3 = true;
 		boolean bbool4 = true;
+		
+		ValueTree<Descriptor> tree2;
+		ValueTree<Descriptor>.iterator i1 = tree2.assoc;
+		ValueTree<Descriptor>.iterator i2;
+		ValueTree<Descriptor>.iterator i3;
 		
 		
 		info("<<<<<<<<<<<<<<<<<<<<<  2.ValueTree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");

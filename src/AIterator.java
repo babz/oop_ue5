@@ -39,7 +39,7 @@ public abstract class AIterator<Location, Node, Assoc, Value> implements ValueIt
 			 l = createNode(v, getNext(cur));
 			 setNext(cur, l);
 		}
-		cur = l;
+//		cur = l;
 		return true;
 	}
 	

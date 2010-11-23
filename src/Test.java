@@ -11,17 +11,28 @@ public class Test{
 		System.out.println(s);
 	}
 	
+	static void printIter(Iter<?> it) {
+		System.out.print("TREEDUMP: ");
+		while (it.hasNext()) {
+			System.out.print(String.format("%s, ", it.next()));
+		}
+		System.out.println();
+	}
 	
 	static int runCount = 0, successCount = 0;
-	static boolean checkIter(Iter<? extends Object> it, Object... expectedValues) {
+	static boolean checkIter(Iter<?> it, Object... expectedValues) {
+		StringBuilder buf = new StringBuilder();
 		runCount++;
 		int i = 0;
 		while (it.hasNext() && i < expectedValues.length) {
 			Object ex = expectedValues[i];
 			Object ac = it.next();
+			buf.append(ac.toString()).append(", ");
 			if ( ! ex.equals(ac)){
 				err(String.format("Expected %s doesn't match %s found at position %d", ex, ac, i));
-				return false;
+				info(buf.toString());
+				printIter(it);
+				return false;		
 			}
 			i++;
 		}
@@ -62,12 +73,26 @@ public class Test{
 		//test Iterator
 		Tree<MyInt>.WideIterator temp;
 		
+		// full tree
+		printIter(intTree.allLabels());
+
 		i.insert(myint1);
+
+		// full tree
+		printIter(intTree.allLabels());
+		
 		i.insert(myint2);
+
+		// full tree
+		printIter(intTree.allLabels());
+
 		i.next();
 		i.next();
 		i.insert(myint4);//wieder auf einer  Ebene h�her
-		
+
+		// full tree
+		printIter(intTree.allLabels());
+
 		info("<<<<<<<<<<<<<<<<<<<<<  1. MyInt Tree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
 		
 		//run through tree via the assoc iterator
@@ -82,6 +107,10 @@ public class Test{
 		i2.insert(myint3);//mit assoc eine Ebene tiefer
 		i2.delete();
 		i2.insert(myint5);
+		
+		// full tree
+		printIter(intTree.allLabels());
+
 		//go down to i2 and check if myint5 is there
 		info("Testcase #" + runCount + ", checking lower branch with assoc after delete() before next() ....");
 		temp = intTree.assoc();
@@ -91,7 +120,7 @@ public class Test{
 		assert_(checkIter(temp, myint3, myint5));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
-
+		
 		i2.next();
 		i2.delete();
 		info("Testcase #" + runCount + ", checking lower branch with assoc after delete() after next() ....");
@@ -103,23 +132,24 @@ public class Test{
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 
-		
+/*		
 		//myint4 & myint2 are deleted. subtree should be deleted as well
 		info("Testcase #" + runCount + ", deleting a node also deletes his subtree...");
 		i.delete();
 		i.delete();
-		Tree<MyInt>.DeepIterator deepTemp;
-		deepTemp = intTree.allLabels();
+
 		
 		assert_(checkIter(temp, myint1));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
-		
+*/		
 
+		Tree<MyInt>.DeepIterator deepTemp;
+		deepTemp = intTree.allLabels();
 		//check iteration with allLabel'S Iterator
 		info("Testcase #" + runCount + ", testing allLabel's Iterator ...");
 		deepTemp = intTree.allLabels();
-		assert_(checkIter(temp, myint1, myint2, myint5, null, myint4));
+		assert_(checkIter(deepTemp, myint1, myint2, myint5, null, myint4));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 		
@@ -136,7 +166,7 @@ public class Test{
 		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
 		deepTemp = intTree.allLabels();
-		assert_(checkIter(temp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5));
+		assert_(checkIter(deepTemp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 		
@@ -151,7 +181,7 @@ public class Test{
 		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
 		deepTemp = intTree.allLabels();
-		assert_(checkIter(temp, myint1, myint2, myint5, null, myint4));
+		assert_(checkIter(deepTemp, myint1, myint2, myint5, null, myint4));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 			

@@ -14,10 +14,10 @@ public class Tree<Label extends Comparable> {
 	protected class Child implements Comparable<Child> {
 		public Child(Label label) {
 			this.label = label;
-			this.assoc = new Children();
+			this.subChildren = new Children();
 		}
 		private Label label;
-		private Children assoc;
+		private Children subChildren;
 		@Override
 		public int compareTo(Child other) {
 			return label.compareTo(other.label);
@@ -31,18 +31,27 @@ public class Tree<Label extends Comparable> {
 		private Stack stack = new Stack();
 		private Stack.Iterator sp = stack.iterate();
 		public DeepIterator() {
-			sp.insert(root.assoc.iterate());
+			sp.insert(root.subChildren.iterate());
+			sp.next();
 		}
 
 		@Override
 		public boolean hasNext() {
 			Children.Iterator here = sp.get();
-			return here.hasNext() || sp.hasNext() || here.get().assoc.iterate().hasNext();
+			if (here == null) return false;
+			if (here.hasNext()) return true;
+			Child thisChild = here.get();
+			if (thisChild == null) return sp.hasNext();
+			Children.Iterator sub = thisChild.subChildren.iterate();
+			if (sub.hasNext()) return true;
+			return true;
 		}
+
 		@Override
 		public Label next() throws NoSuchElementException {
 			Children.Iterator here = sp.get();
-			Children.Iterator down = here.get().assoc.iterate();
+			if (here == null) throw new NoSuchElementException();
+			Children.Iterator down = here.next().subChildren.iterate();
 			if (down.hasNext()) {
 				sp.insert(down);
 				return down.next().label;
@@ -78,7 +87,7 @@ public class Tree<Label extends Comparable> {
 		public WideIterator assoc() {
 			Child c = pos.get();
 			if(c == null) return null;
-			return new WideIterator(c.assoc);
+			return new WideIterator(c.subChildren);
 		}
 
 		@Override
@@ -107,7 +116,7 @@ public class Tree<Label extends Comparable> {
 	 * neuen Iterator.
 	 */
 	public WideIterator assoc(){
-		return new WideIterator(root.assoc);
+		return new WideIterator(root.subChildren);
 	}
 	
 	/*

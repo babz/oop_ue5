@@ -109,7 +109,7 @@ public class Test{
 		temp.insert(myint5);
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
-		
+		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
 		temp = intTree.allLabels();
 		assert checkIter(temp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5 );
@@ -124,14 +124,13 @@ public class Test{
 		temp.delete();
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
-		
+		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
 		temp = intTree.allLabels();
 		assert checkIter(temp, myint1, myint2, myint5, null, myint4);
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 			
-		
 		
 		
 		
@@ -142,8 +141,10 @@ public class Test{
 		 * von Knoten aus. 
 		 */
 		
+		ValueTree tree2;
+		
 		ADescriptor ades1 = new ADescriptor("Herwig isst Schokolade");
-		ADescriptor ades2 = new ADescriptor("Alle Kinder m�gen Schokolade");
+		ADescriptor ades2 = new ADescriptor("Alle Kinder moegen Schokolade");
 		ADescriptor ades3 = new ADescriptor("Am besten ist aber Kinder Schokolade");
 		ADescriptor ades4 = new ADescriptor("und Milka");
 		ADescriptor ades5 = new ADescriptor("des Rest isst nix");
@@ -167,6 +168,8 @@ public class Test{
 		
 		info("<<<<<<<<<<<<<<<<<<<<<  2.ValueTree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
 		
+		
+		
 		/* 3:
 		 * Falls ValueTree mit entsprechenden Typparameterersetzungen ein Untertyp von Tree ist, 
 		 * betrachten Sie den in Punkt 2 erzeugten Baum als Instanz von Tree, das hei�t, weisen Sie 
@@ -188,7 +191,7 @@ public class Test{
 		 * ADescriptor als auch von BDescriptor wenn ungleich null) als Labels von Kanten in den neuen Baum 
 		 * ein. Lesen Sie die Labels der Kanten �ber Iteratoren aus.
 		 */
-		
+		Tree<Descriptor> tree4;
 		ADescriptor ades6 = new ADescriptor("solalala");
 		ADescriptor ades7 = new ADescriptor("jaja");
 		ADescriptor ades8 = new ADescriptor("kein b");

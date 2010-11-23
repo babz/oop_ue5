@@ -51,7 +51,6 @@ public class Tree<LabelType extends Comparable> {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
 	}
 
 	/*

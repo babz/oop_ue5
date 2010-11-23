@@ -84,7 +84,7 @@ public class Tree<Label extends Comparable> {
 		@Override
 		public boolean insert(Label a) {
 			Children.Iterator pos = here.iterate();
-			while (pos.hasNext() && pos.next().label.compareTo(a) < 0) {/*loopy loop*/}
+			while (pos.hasNext() && a.compareTo(pos.next().label) > 0) {/*loopy loop*/}
 			return pos.insert(new Child(a));
 		}
 

@@ -32,15 +32,12 @@ public abstract class AIterator<Location, Node, Assoc, Value> implements ValueIt
 	public boolean insert(Node v) {
 		Location l;
 		if (cur == null) {
+			// start
 			l = createNode(v, getStart());
 			setStart(l);
 		} else {
-			 l = createNode(v, cur);
-			if (prev == null){
-				setStart(l);
-			} else {
-				setNext(prev, l);
-			}
+			 l = createNode(v, getNext(cur));
+			 setNext(cur, l);
 		}
 		cur = l;
 		return true;

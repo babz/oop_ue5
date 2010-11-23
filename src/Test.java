@@ -25,7 +25,7 @@ public class Test{
 			}
 			i++;
 		}
-		if (it.hasNext() || i == expectedValues.length) {
+		if (it.hasNext() || i != expectedValues.length) {
 			err(String.format("Lengths don't match, Iterator hasNext() == %b; expectedValues.length == %d; i == %d", it.hasNext(), expectedValues.length, i));
 			return false;
 		}
@@ -49,11 +49,11 @@ public class Test{
 		 * �berpr�fen Sie die Korrektheit durch Ausgabe der �ber Iteratoren ermittelten Labels.
 		 */
 		Tree<MyInt> intTree;
-		MyInt myint1 = new MyInt(6);
-		MyInt myint2 = new MyInt(3);
-		MyInt myint3 = new MyInt(4);
-		MyInt myint4 = new MyInt(8);
-		MyInt myint5 = new MyInt(9);
+		MyInt myint1 = new MyInt(1);
+		MyInt myint2 = new MyInt(2);
+		MyInt myint3 = new MyInt(3);
+		MyInt myint4 = new MyInt(4);
+		MyInt myint5 = new MyInt(5);
 		
 		intTree = new Tree<MyInt>();
 		//iterators for insertion
@@ -66,11 +66,7 @@ public class Test{
 		i.insert(myint2);
 		i.next();
 		i.next();
-		i2 = i.assoc();
-		i2.insert(myint3);//mit assoc eine Ebene tiefer
 		i.insert(myint4);//wieder auf einer  Ebene h�her
-		i2.delete();
-		i2.insert(myint5);
 		
 		info("<<<<<<<<<<<<<<<<<<<<<  1. MyInt Tree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
 		
@@ -82,8 +78,23 @@ public class Test{
 		info("-----------------------------------------------------------" + "\n");
 		
 		
+		i2 = i.assoc();
+		i2.insert(myint3);//mit assoc eine Ebene tiefer
+		i2.delete();
+		i2.insert(myint5);
 		//go down to i2 and check if myint5 is there
-		info("Testcase #" + runCount + ", checking lower branch with assoc....");
+		info("Testcase #" + runCount + ", checking lower branch with assoc after delete() before next() ....");
+		temp = intTree.assoc();
+		temp.next();
+		temp.next();
+		temp = temp.assoc();
+		assert_(checkIter(temp, myint3, myint5));
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+
+		i2.next();
+		i2.delete();
+		info("Testcase #" + runCount + ", checking lower branch with assoc after delete() after next() ....");
 		temp = intTree.assoc();
 		temp.next();
 		temp.next();
@@ -91,7 +102,7 @@ public class Test{
 		assert_(checkIter(temp, myint5));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
-		
+
 		
 		//myint4 & myint2 are deleted. subtree should be deleted as well
 		info("Testcase #" + runCount + ", deleting a node also deletes his subtree...");

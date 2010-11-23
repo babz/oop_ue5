@@ -57,6 +57,8 @@ public class Test{
 		
 		i.insert(myint1);
 		i.insert(myint2);
+		i.next();
+		i.next();
 		i2 = i.assoc();
 		i2.insert(myint3);//mit assoc eine Ebene tiefer
 		i.insert(myint4);//wieder auf einer  Ebene höher

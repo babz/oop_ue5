@@ -36,18 +36,32 @@ abstract public class Tree<Label extends Comparable> {
 
 		@Override
 		public boolean hasNext() {
-			return false;
+			Children.Iterator here = sp.get();
+			return here.hasNext() || sp.hasNext() || here.get().assoc.iterate().hasNext();
 		}
 		@Override
 		public Label next() throws NoSuchElementException {
-			return null;
+			Children.Iterator here = sp.get();
+			Children.Iterator down = here.get().assoc.iterate();
+			if (down.hasNext()) {
+				sp.insert(down);
+				return down.next().label;
+			} else if (here.hasNext()) {
+				return here.next().label;
+			} else if (sp.delete()) {
+				return null;
+			} else {
+				throw new NoSuchElementException();
+			}
 		}
 		
 	}
 	
 	class WideIterator implements AssocIter<Label, WideIterator> {
+		Children here;
 		Children.Iterator pos;
 		public WideIterator(Children c) {
+			here = c;
 			pos = c.iterate();
 		}
 		@Override
@@ -67,6 +81,8 @@ abstract public class Tree<Label extends Comparable> {
 
 		@Override
 		public boolean insert(Label a) {
+			Children.Iterator pos = here.iterate();
+			while (pos.hasNext() && pos.next().label.compareTo(a) < 0) {/*loopy loop*/}
 			return pos.insert(new Child(a));
 		}
 
@@ -103,6 +119,6 @@ abstract public class Tree<Label extends Comparable> {
 	 * beim Testen hilfreich.
 	 */
 	public DeepIterator allLabels(){
-		return new DeepIterator(root.assoc);
+		return new DeepIterator();
 	}
 }

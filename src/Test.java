@@ -32,6 +32,13 @@ public class Test{
 		successCount++;
 		return true;
 	}
+	
+	static void assert_(boolean cond) {
+		if ( ! cond) {
+			err("Assertion failed!");
+			System.exit(1);
+		}
+	}
 
 	public static void main(String args[]){
 
@@ -61,7 +68,7 @@ public class Test{
 		i.next();
 		i2 = i.assoc();
 		i2.insert(myint3);//mit assoc eine Ebene tiefer
-		i.insert(myint4);//wieder auf einer  Ebene höher
+		i.insert(myint4);//wieder auf einer  Ebene hï¿½her
 		i2.delete();
 		i2.insert(myint5);
 		
@@ -70,7 +77,7 @@ public class Test{
 		//run through tree via the assoc iterator
 		info("Testcase #" + runCount + ", testing assoc Iterator ...");
 		temp = intTree.assoc();
-		assert checkIter(temp, myint1, myint2, myint4);
+		assert_(checkIter(temp, myint1, myint2, myint4));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 		
@@ -81,7 +88,7 @@ public class Test{
 		temp.next();
 		temp.next();
 		temp = temp.assoc();
-		assert checkIter(temp, myint5);
+		assert_(checkIter(temp, myint5));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 		
@@ -93,7 +100,7 @@ public class Test{
 		Tree<MyInt>.DeepIterator deepTemp;
 		deepTemp = intTree.allLabels();
 		
-		assert checkIter(temp, myint1);
+		assert_(checkIter(temp, myint1));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 		
@@ -101,7 +108,7 @@ public class Test{
 		//check iteration with allLabel'S Iterator
 		info("Testcase #" + runCount + ", testing allLabel's Iterator ...");
 		deepTemp = intTree.allLabels();
-		assert checkIter(temp, myint1, myint2, myint5, null, myint4);
+		assert_(checkIter(temp, myint1, myint2, myint5, null, myint4));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 		
@@ -118,7 +125,7 @@ public class Test{
 		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
 		deepTemp = intTree.allLabels();
-		assert checkIter(temp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5 );
+		assert_(checkIter(temp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 		
@@ -133,7 +140,7 @@ public class Test{
 		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
 		deepTemp = intTree.allLabels();
-		assert checkIter(temp, myint1, myint2, myint5, null, myint4);
+		assert_(checkIter(temp, myint1, myint2, myint5, null, myint4));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
 			

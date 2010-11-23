@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-abstract public class Tree<Label extends Comparable> {
+public class Tree<Label extends Comparable> {
 	protected class Children extends LinkedList<Child>{}
 	protected class Child implements Comparable<Child> {
 		public Child(Label label) {
@@ -76,7 +76,9 @@ abstract public class Tree<Label extends Comparable> {
 
 		@Override
 		public WideIterator assoc() {
-			return new WideIterator(pos.get().assoc);
+			Child c = pos.get();
+			if(c == null) return null;
+			return new WideIterator(c.assoc);
 		}
 
 		@Override

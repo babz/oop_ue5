@@ -1,4 +1,6 @@
 public class Test{
+	
+	
 	static void err(String s) {
 		System.out.print("ERROR: ");
 		System.out.println(s);
@@ -31,7 +33,7 @@ public class Test{
 		return true;
 	}
 
-	public static void Main(String args[]){
+	public static void main(String args[]){
 
 		/* 1:
 		 * Erzeugen Sie einen Baum als Instanz von Tree, in dem Labels auf Kanten vom Typ MyInt sind, 
@@ -48,10 +50,10 @@ public class Test{
 		
 		intTree = new Tree<MyInt>();
 		//iterators for insertion
-		Tree<MyInt>.Iterator i = intTree.assoc();
-		Tree<MyInt>.Iterator i2;
+		Tree<MyInt>.WideIterator i = intTree.assoc();
+		Tree<MyInt>.WideIterator i2;
 		//test Iterator
-		Tree<MyInt>.Iterator temp;
+		Tree<MyInt>.WideIterator temp;
 		
 		i.insert(myint1);
 		i.insert(myint2);
@@ -86,7 +88,9 @@ public class Test{
 		info("Testcase #" + runCount + ", deleting a node also deletes his subtree...");
 		i.delete();
 		i.delete();
-		temp = intTree.allLabels();
+		Tree<MyInt>.DeepIterator deepTemp;
+		deepTemp = intTree.allLabels();
+		
 		assert checkIter(temp, myint1);
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
@@ -94,7 +98,7 @@ public class Test{
 
 		//check iteration with allLabel'S Iterator
 		info("Testcase #" + runCount + ", testing allLabel's Iterator ...");
-		temp = intTree.allLabels();
+		deepTemp = intTree.allLabels();
 		assert checkIter(temp, myint1, myint2, myint5, null, myint4);
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
@@ -111,7 +115,7 @@ public class Test{
 		info("-----------------------------------------------------------" + "\n");
 		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
-		temp = intTree.allLabels();
+		deepTemp = intTree.allLabels();
 		assert checkIter(temp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5 );
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
@@ -126,7 +130,7 @@ public class Test{
 		info("-----------------------------------------------------------" + "\n");
 		//checking correctness
 		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
-		temp = intTree.allLabels();
+		deepTemp = intTree.allLabels();
 		assert checkIter(temp, myint1, myint2, myint5, null, myint4);
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
@@ -162,14 +166,38 @@ public class Test{
 		boolean bbool2 = false;
 		boolean bbool3 = true;
 		boolean bbool4 = true;
-		
+		/*
 		ValueTree<Descriptor> tree2;
 		ValueTree<Descriptor>.iterator i1 = tree2.assoc;
 		ValueTree<Descriptor>.iterator i2;
 		ValueTree<Descriptor>.iterator i3;
-		
+		*/
 		
 		info("<<<<<<<<<<<<<<<<<<<<<  2.ValueTree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
+		
+		
+		
+		//run through current branch & return a's & b's (wide search)
+		info("Testcase #" + runCount + ", testing assoc Iterator ...");
+
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+		
+		
+		
+		//run through complete tree & return a's & b's (depth search)
+		info("Testcase #" + runCount + ", testing assoc Iterator ...");
+
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+		
+		
+		
+		//
+		info("Testcase #" + runCount + ", testing assoc Iterator ...");
+
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
 		
 		
 		

@@ -9,47 +9,70 @@ import java.util.NoSuchElementException;
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-public class Tree<LabelType extends Comparable> {
-	private LinkedList<Node> children;
-
-	public Tree() {
-		this.children = new LinkedList<Node>();		
-	}
-	
-	public Tree(LinkedList<Node> children) {
-		this.children = children;
-	}
-	
-	public class Iterator implements AssocIter<LabelType, Iterator> {
-		
+abstract public class Tree<Label extends Comparable> {
+	protected class Children extends LinkedList<Child>{}
+	protected class Child implements Comparable<Child> {
+		public Child(Label label) {
+			this.label = label;
+			this.assoc = new Children();
+		}
+		private Label label;
+		private Children assoc;
 		@Override
-		public LabelType next() throws NoSuchElementException {
-			// TODO Auto-generated method stub
-			return null;
+		public int compareTo(Child other) {
+			return label.compareTo(other.label);
+		}
+	}
+	
+	private Child root = new Child(null);
+	
+	class DeepIterator implements Iter<Label> {
+		private class Stack extends LinkedList<Children.Iterator>{}
+		private Stack stack = new Stack();
+		private Stack.Iterator sp = stack.iterate();
+		public DeepIterator() {
+			sp.insert(root.assoc.iterate());
 		}
 
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
 			return false;
 		}
-
 		@Override
-		public Iterator assoc() {
-			// TODO Auto-generated method stub
+		public Label next() throws NoSuchElementException {
 			return null;
 		}
+		
+	}
+	
+	class WideIterator implements AssocIter<Label, WideIterator> {
+		Children.Iterator pos;
+		public WideIterator(Children c) {
+			pos = c.iterate();
+		}
+		@Override
+		public Label next() throws NoSuchElementException {
+			return pos.next().label;
+		}
 
 		@Override
-		public boolean insert(LabelType a) {
-			// TODO Auto-generated method stub
-			return false;
+		public boolean hasNext() {
+			return pos.hasNext();
+		}
+
+		@Override
+		public WideIterator assoc() {
+			return new WideIterator(pos.get().assoc);
+		}
+
+		@Override
+		public boolean insert(Label a) {
+			return pos.insert(new Child(a));
 		}
 
 		@Override
 		public boolean delete() {
-			// TODO Auto-generated method stub
-			return false;
+			return pos.delete();
 		}
 	}
 
@@ -65,9 +88,8 @@ public class Tree<LabelType extends Comparable> {
 	 * Jeder Aufruf von assoc (sowohl in Instanzen von Tree als auch in Iteratoren) erzeugt einen 
 	 * neuen Iterator.
 	 */
-	public Iterator assoc(){
-		assert false;
-		return null;
+	public WideIterator assoc(){
+		return new WideIterator(root.assoc);
 	}
 	
 	/*
@@ -79,18 +101,7 @@ public class Tree<LabelType extends Comparable> {
 	 * wie sie von durch assoc erzeugten Iteratoren zurückgegeben werden. Die Methode allLabels ist 
 	 * beim Testen hilfreich.
 	 */
-	public Iterator allLabels(){
-		assert false;
-		return null;
-	}
-	
-	private class Node {
-		public final LabelType edge;
-		public final Tree<LabelType> child;
-		public Node(LabelType edge, Tree<LabelType> child) {
-			this.edge = edge;
-			this.child = child;
-		}
-
+	public DeepIterator allLabels(){
+		return new DeepIterator(root.assoc);
 	}
 }

@@ -1,11 +1,11 @@
-public interface AssocIter <ValueType, AssocType> extends Iter<ValueType>{
+public interface AssocIter <Node, Assoc> extends Iter<Node>{
 	
 	/* assoc liefert ein Objekt zur�ck, das mit dem zuletzt von 
 	 * next zur�ckgegebenen Element assoziiert ist. Das Ergebnis
 	 *  ist null wenn noch kein Aufruf von next erfolgt ist oder 
 	 *  der letzte Aufruf von next ebenso null geliefert hat.
 	 */
-	public AssocType assoc();
+	public Assoc assoc();
 	
 	/* insert kann ein neues Element (an nicht n�her definierter 
 	 * Stelle und ohne Angabe assoziierter Objekte) in das Aggregat 
@@ -13,7 +13,7 @@ public interface AssocIter <ValueType, AssocType> extends Iter<ValueType>{
 	 * ist true wenn das Element tats�chlich eingef�gt wurde, sonst false. 
 	 */
 	//pre: a is not null
-	public boolean insert(ValueType a);
+	public boolean insert(Node a);
 	
 	/*delete entfernt das zuletzt von next zur�ckgegebe Element aus dem Aggregat. 
 	 * Das Aggregat bleibt unver�ndert, wenn zuvor kein Element von next 

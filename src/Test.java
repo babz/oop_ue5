@@ -39,20 +39,102 @@ public class Test{
 		 * (also auch Kanten, die nicht von der Wurzel ausgehen), entfernen Sie Kanten, und so weiter. 
 		 * ï¿½berprï¿½fen Sie die Korrektheit durch Ausgabe der ï¿½ber Iteratoren ermittelten Labels.
 		 */
-		Tree intTree;
+		Tree<MyInt> intTree;
 		MyInt myint1 = new MyInt(6);
 		MyInt myint2 = new MyInt(3);
 		MyInt myint3 = new MyInt(4);
 		MyInt myint4 = new MyInt(8);
 		MyInt myint5 = new MyInt(9);
 		
-		intTree = new Tree(myint1, null);
+		intTree = new Tree<MyInt>();
+		//iterators for insertion
+		Tree<MyInt>.Iterator i = intTree.assoc();
+		Tree<MyInt>.Iterator i2;
+		//test Iterator
+		Tree<MyInt>.Iterator temp;
+		
+		i.insert(myint1);
+		i.insert(myint2);
+		i2 = i.assoc();
+		i2.insert(myint3);//mit assoc eine Ebene tiefer
+		i.insert(myint4);//wieder auf einer  Ebene höher
+		i2.delete();
+		i2.insert(myint5);
+		
+		info("<<<<<<<<<<<<<<<<<<<<<  1. MyInt Tree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
+		
+		//run through tree via the assoc iterator
+		info("Testcase #" + runCount + ", testing assoc Iterator ...");
+		temp = intTree.assoc();
+		assert checkIter(temp, myint1, myint2, myint4);
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
 		
 		
-//		checkIter(tree.allLabels(), "bla", "bli", "blu");
+		//go down to i2 and check if myint5 is there
+		info("Testcase #" + runCount + ", checking lower branch with assoc....");
+		temp = intTree.assoc();
+		temp.next();
+		temp.next();
+		temp = temp.assoc();
+		assert checkIter(temp, myint5);
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+		
+		
+		//myint4 & myint2 are deleted. subtree should be deleted as well
+		info("Testcase #" + runCount + ", deleting a node also deletes his subtree...");
+		i.delete();
+		i.delete();
+		temp = intTree.allLabels();
+		assert checkIter(temp, myint1);
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
 		
 
+		//check iteration with allLabel'S Iterator
+		info("Testcase #" + runCount + ", testing allLabel's Iterator ...");
+		temp = intTree.allLabels();
+		assert checkIter(temp, myint1, myint2, myint5, null, myint4);
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+		
+		
+		//add some more 
+		info("Testcase #" + runCount + ", adding some subbranches...");
+		temp = i.assoc();
+		temp.insert(myint3);
+		temp.insert(myint4);
+		temp = temp.assoc();
+		temp.insert(myint5);
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+		
+		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
+		temp = intTree.allLabels();
+		assert checkIter(temp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5 );
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+		
+		
+		//remove them again
+		info("Testcase #" + runCount + ", removing previously inserted...");
+		temp = i.assoc();
+		temp.delete();
+		temp.delete();
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
+		
+		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
+		temp = intTree.allLabels();
+		assert checkIter(temp, myint1, myint2, myint5, null, myint4);
+		info("... success");
+		info("-----------------------------------------------------------" + "\n");
 			
+		
+		
+		
+		
 		/* 2:
 		 * Erzeugen Sie einen Baum als Instanz von ValueTree, in dem Labels auf Kanten vom Typ ADescriptor 
 		 * und Werte der Knoten vom Typ BDescriptor sind, und machen Sie entsprechende ï¿½berprï¿½fungen wie in 
@@ -81,6 +163,9 @@ public class Test{
 		boolean bbool2 = false;
 		boolean bbool3 = true;
 		boolean bbool4 = true;
+		
+		
+		info("<<<<<<<<<<<<<<<<<<<<<  2.ValueTree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
 		
 		/* 3:
 		 * Falls ValueTree mit entsprechenden Typparameterersetzungen ein Untertyp von Tree ist, 

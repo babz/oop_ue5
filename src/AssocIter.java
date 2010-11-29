@@ -1,4 +1,4 @@
-public interface AssocIter <Node, Assoc> extends Iter<Node>{
+public interface AssocIter <Item, Assoc> extends Iter<Item>{
 	
 	/* assoc liefert ein Objekt zur�ck, das mit dem zuletzt von 
 	 * next zur�ckgegebenen Element assoziiert ist. Das Ergebnis
@@ -13,7 +13,7 @@ public interface AssocIter <Node, Assoc> extends Iter<Node>{
 	 * ist true wenn das Element tats�chlich eingef�gt wurde, sonst false. 
 	 */
 	//pre: a is not null
-	public boolean insert(Node a);
+	public boolean insert(Item a);
 	
 	/*delete entfernt das zuletzt von next zur�ckgegebe Element aus dem Aggregat. 
 	 * Das Aggregat bleibt unver�ndert, wenn zuvor kein Element von next 

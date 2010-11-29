@@ -9,19 +9,15 @@ import java.util.NoSuchElementException;
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-public class Tree<Label extends Comparable> {
-	protected class Children extends LinkedList<Child>{}
-	protected class Child implements Comparable<Child> {
+public class Tree<Label extends Comparable<Label>> {
+	private class Children extends LinkedList<Child>{}
+	private class Child {
 		public Child(Label label) {
 			this.label = label;
 			this.subChildren = new Children();
 		}
 		private Label label;
 		private Children subChildren;
-		@Override
-		public int compareTo(Child other) {
-			return label.compareTo(other.label);
-		}
 	}
 	
 	private Child root = new Child(null);
@@ -32,35 +28,41 @@ public class Tree<Label extends Comparable> {
 		private Stack.Iterator sp = stack.iterate();
 		public DeepIterator() {
 			sp.insert(root.subChildren.iterate());
-			sp.next();
 		}
 
 		@Override
 		public boolean hasNext() {
-			Children.Iterator here = sp.get();
-			if (here == null) return false;
+			// first entry (top) of stack
+			Stack.Iterator tos = sp.copy();
+			Children.Iterator here = tos.next();
+
+			// if we're not on base level, we have at least null to return next
+			if (tos.hasNext()) return true;
+			
+			// also if we have at least one more node horizontally
 			if (here.hasNext()) return true;
-			Child thisChild = here.get();
-			if (thisChild == null) return sp.hasNext();
-			Children.Iterator sub = thisChild.subChildren.iterate();
-			if (sub.hasNext()) return true;
-			return true;
+
+			// item has no children
+			return false;
 		}
 
 		@Override
 		public Label next() throws NoSuchElementException {
-			Children.Iterator here = sp.get();
-			if (here == null) throw new NoSuchElementException();
-			Children.Iterator down = here.next().subChildren.iterate();
-			if (down.hasNext()) {
-				sp.insert(down);
-				return down.next().label;
-			} else if (here.hasNext()) {
-				return here.next().label;
-			} else if (sp.delete()) {
-				return null;
+			Stack.Iterator tos = sp.copy();
+			Children.Iterator here = tos.next();
+			if (here.hasNext()) {
+				Child item = here.next();
+				Children.Iterator sub = item.subChildren.iterate();
+				if (sub.hasNext()) {
+					sp.insert(sub);
+				}
+				return item.label;
 			} else {
-				throw new NoSuchElementException();
+				if ( ! tos.hasNext()) {
+					throw new NoSuchElementException("Tree iterator depleted");
+				}
+				tos.delete();
+				return null;
 			}
 		}
 		
@@ -86,14 +88,24 @@ public class Tree<Label extends Comparable> {
 		@Override
 		public WideIterator assoc() {
 			Child c = pos.get();
-			if(c == null) return null;
+			if(c == null) {
+				return null;
+			}
 			return new WideIterator(c.subChildren);
 		}
 
 		@Override
 		public boolean insert(Label a) {
 			Children.Iterator pos = here.iterate();
-			while (pos.hasNext() && a.compareTo(pos.next().label) > 0) {/*loopy loop*/}
+			Children.Iterator ahead = pos.copy();
+			while (ahead.hasNext()) {
+				Child next = ahead.next();
+				if (a.compareTo(next.label) > 0) {
+					pos.next();
+				} else {
+					break;
+				}
+			}
 			return pos.insert(new Child(a));
 		}
 

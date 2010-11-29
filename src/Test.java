@@ -1,3 +1,4 @@
+
 public class Test{
 	
 	
@@ -11,8 +12,9 @@ public class Test{
 		System.out.println(s);
 	}
 	
-	static void printIter(Iter<?> it) {
-		System.out.print("TREEDUMP: ");
+	static void printIter(String label, Iter<?> it) {
+		System.out.print(label);
+		System.out.print(": ");
 		while (it.hasNext()) {
 			System.out.print(String.format("%s, ", it.next()));
 		}
@@ -27,11 +29,11 @@ public class Test{
 		while (it.hasNext() && i < expectedValues.length) {
 			Object ex = expectedValues[i];
 			Object ac = it.next();
-			buf.append(ac.toString()).append(", ");
-			if ( ! ex.equals(ac)){
+			buf.append(""+ac).append(", ");
+			if (! (ex == ac || ex.equals(ac))){
 				err(String.format("Expected %s doesn't match %s found at position %d", ex, ac, i));
 				info(buf.toString());
-				printIter(it);
+				printIter("failed", it);
 				return false;		
 			}
 			i++;
@@ -52,6 +54,8 @@ public class Test{
 	}
 
 	public static void main(String args[]){
+		
+		testLList();
 
 		/* 1:
 		 * Erzeugen Sie einen Baum als Instanz von Tree, in dem Labels auf Kanten vom Typ MyInt sind, 
@@ -59,134 +63,72 @@ public class Test{
 		 * (also auch Kanten, die nicht von der Wurzel ausgehen), entfernen Sie Kanten, und so weiter. 
 		 * �berpr�fen Sie die Korrektheit durch Ausgabe der �ber Iteratoren ermittelten Labels.
 		 */
-		Tree<MyInt> intTree;
-		MyInt myint1 = new MyInt(1);
-		MyInt myint2 = new MyInt(2);
-		MyInt myint3 = new MyInt(3);
-		MyInt myint4 = new MyInt(4);
-		MyInt myint5 = new MyInt(5);
+		Tree<MyInt> tree;
+		MyInt i1 = new MyInt(1);
+		MyInt i2 = new MyInt(2);
+		MyInt i3 = new MyInt(3);
+		MyInt i4 = new MyInt(4);
+		MyInt i5 = new MyInt(5);
+		MyInt i6 = new MyInt(6);
 		
-		intTree = new Tree<MyInt>();
+		tree = new Tree<MyInt>();
 		//iterators for insertion
-		Tree<MyInt>.WideIterator i = intTree.assoc();
-		Tree<MyInt>.WideIterator i2;
-		//test Iterator
+		Tree<MyInt>.WideIterator i = tree.assoc();
 		Tree<MyInt>.WideIterator temp;
 		
-		// full tree
-		printIter(intTree.allLabels());
+		i.insert(i4);
+		i.insert(i1);
+		i.insert(i2);
 
-		i.insert(myint1);
-
-		// full tree
-		printIter(intTree.allLabels());
-		
-		i.insert(myint2);
-
-		// full tree
-		printIter(intTree.allLabels());
-
-		i.next();
-		i.next();
-		i.insert(myint4);//wieder auf einer  Ebene h�her
-
-		// full tree
-		printIter(intTree.allLabels());
-
-		info("<<<<<<<<<<<<<<<<<<<<<  1. MyInt Tree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
-		
 		//run through tree via the assoc iterator
-		info("Testcase #" + runCount + ", testing assoc Iterator ...");
-		temp = intTree.assoc();
-		assert_(checkIter(temp, myint1, myint2, myint4));
+		info("Testcase #" + runCount + ", testing sorted insert ...");
+		temp = tree.assoc();
+		assert_(checkIter(temp, i1, i2, i4));
 		info("... success");
-		info("-----------------------------------------------------------" + "\n");
+		info("-----------------------------------------------------------\n");
 		
-		
-		i2 = i.assoc();
-		i2.insert(myint3);//mit assoc eine Ebene tiefer
-		i2.delete();
-		i2.insert(myint5);
-		
-		// full tree
-		printIter(intTree.allLabels());
-
-		//go down to i2 and check if myint5 is there
-		info("Testcase #" + runCount + ", checking lower branch with assoc after delete() before next() ....");
-		temp = intTree.assoc();
-		temp.next();
-		temp.next();
+		temp = tree.assoc();
+		temp.next(); temp.next();
+		// one level down
 		temp = temp.assoc();
-		assert_(checkIter(temp, myint3, myint5));
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
+		temp.insert(i5);
+		temp.insert(i3);
 		
-		i2.next();
-		i2.delete();
-		info("Testcase #" + runCount + ", checking lower branch with assoc after delete() after next() ....");
-		temp = intTree.assoc();
-		temp.next();
-		temp.next();
-		temp = temp.assoc();
-		assert_(checkIter(temp, myint5));
+		info("Testcase #" + runCount + ", checking lower branch ...");
+		assert_(checkIter(tree.allLabels(), i1, i2, i3, i5, null, i4));
 		info("... success");
-		info("-----------------------------------------------------------" + "\n");
+		info("-----------------------------------------------------------\n");
+		
+		temp = tree.assoc();
+		temp.next(); temp.next();
+		temp.delete();
+		info("Testcase #" + runCount + ", check after delete ...");
+		assert_(checkIter(tree.allLabels(), i1, i4));
+		info("... success");
+		info("-----------------------------------------------------------\n");
 
-/*		
-		//myint4 & myint2 are deleted. subtree should be deleted as well
-		info("Testcase #" + runCount + ", deleting a node also deletes his subtree...");
-		i.delete();
-		i.delete();
-
-		
-		assert_(checkIter(temp, myint1));
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
-*/		
-
-		Tree<MyInt>.DeepIterator deepTemp;
-		deepTemp = intTree.allLabels();
-		//check iteration with allLabel'S Iterator
-		info("Testcase #" + runCount + ", testing allLabel's Iterator ...");
-		deepTemp = intTree.allLabels();
-		assert_(checkIter(deepTemp, myint1, myint2, myint5, null, myint4));
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
-		
-		
 		//add some more 
 		info("Testcase #" + runCount + ", adding some subbranches...");
-		temp = i.assoc();
-		temp.insert(myint3);
-		temp.insert(myint4);
+		temp = tree.assoc();
+		temp.insert(i3);
+		temp.next(); temp.next();
 		temp = temp.assoc();
-		temp.insert(myint5);
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
-		//checking correctness
-		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
-		deepTemp = intTree.allLabels();
-		assert_(checkIter(deepTemp, myint1, myint2, myint5, null, myint4, myint3, myint4, myint5));
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
+		temp.insert(i5);
+		temp.insert(i1);
 		
-		
-		//remove them again
-		info("Testcase #" + runCount + ", removing previously inserted...");
-		temp = i.assoc();
-		temp.delete();
-		temp.delete();
+		temp = tree.assoc();
+		temp.insert(i2); 
+		temp.next(); temp.next();
+		temp = temp.assoc();
+		temp.insert(i6);
+		temp.insert(i5); temp.next();
+		temp = temp.assoc();
+		temp.insert(i4);
+		temp.insert(i1);
+		 
+		assert_(checkIter(tree.allLabels(), i1, i2, i5, i1, i4, null, i6, null, i3, i1, i5, null, i4));
 		info("... success");
-		info("-----------------------------------------------------------" + "\n");
-		//checking correctness
-		info("Testcase #" + runCount + ", checking correctness with allLabels Iterator ...");
-		deepTemp = intTree.allLabels();
-		assert_(checkIter(deepTemp, myint1, myint2, myint5, null, myint4));
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
-			
-		
-		
+		info("-----------------------------------------------------------\n");
 		
 		/* 2:
 		 * Erzeugen Sie einen Baum als Instanz von ValueTree, in dem Labels auf Kanten vom Typ ADescriptor 
@@ -195,27 +137,17 @@ public class Test{
 		 * von Knoten aus. 
 		 */
 		
-		ADescriptor ades1 = new ADescriptor("Herwig isst Schokolade");
-		ADescriptor ades2 = new ADescriptor("Alle Kinder moegen Schokolade");
-		ADescriptor ades3 = new ADescriptor("Am besten ist aber Kinder Schokolade");
-		ADescriptor ades4 = new ADescriptor("und Milka");
-		ADescriptor ades5 = new ADescriptor("des Rest isst nix");
+		ADescriptor a1 = new ADescriptor("L0f0 isst Schokolade");
+		ADescriptor a2 = new ADescriptor("Alle Kinder moegen Schokolade");
+		ADescriptor a3 = new ADescriptor("Am besten ist aber Kinder Schokolade");
+		ADescriptor a4 = new ADescriptor("und Milka");
+		ADescriptor a5 = new ADescriptor("des Rest isst nix");
 		
-		BDescriptor bdes1 = new BDescriptor("Bald ist Weihnachten");
-		BDescriptor bdes2 = new BDescriptor("Da wirds kalt");
-		BDescriptor bdes3 = new BDescriptor("aber nur mit Schlagobers");
-		BDescriptor bdes4 = new BDescriptor("aber jetzt");
-		
-		int aint1 = 1;
-		int aint2 = 2;
-		int aint3 = 3;
-		int aint4 = 1;
-		int aint5 = 0;
-		
-		boolean bbool1 = true;
-		boolean bbool2 = false;
-		boolean bbool3 = true;
-		boolean bbool4 = true;
+		BDescriptor b1 = new BDescriptor("Bald ist Weihnachten");
+		BDescriptor b2 = new BDescriptor("Da wirds kalt");
+		BDescriptor b3 = new BDescriptor("aber nur mit Schlagobers");
+		BDescriptor b4 = new BDescriptor("aber jetzt");
+
 		/*
 		ValueTree<Descriptor> tree2;
 		ValueTree<Descriptor>.iterator i1 = tree2.assoc;
@@ -287,5 +219,21 @@ public class Test{
 		boolean bbool5 = true;
 		boolean bbool6 = false;
 		
+	}
+	
+	static void testLList() {
+		LinkedList<String> l = new LinkedList<String>();
+		checkIter(l.iterate());
+		ValueIter<String, String, String> temp = l.iterate();
+		
+		temp.insert("abc"); temp.next();
+		checkIter(l.iterate(), "abc");
+		
+		temp.insert("def"); temp.next();
+		checkIter(l.iterate(), "abc", "def");
+		
+		temp = l.iterate(); temp.next();
+		assert_(temp.delete());
+		checkIter(l.iterate(), "def");
 	}
 }

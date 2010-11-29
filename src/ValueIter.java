@@ -2,7 +2,7 @@
  * gibt direkten Zugriff auf einen Wert des Aggregats
  * (durch einen weiteren Typparameter bestimmten Typs)
  */
-public interface ValueIter <Node, Assoc, Value> extends AssocIter<Node, Assoc>{
+public interface ValueIter <Item, Assoc, Value> extends AssocIter<Item, Assoc>{
 	/*
 	 * setzt den Wert im Aggregat auf den Parameter von set (
 	 * unabhängig vom Zustand des Iterators)

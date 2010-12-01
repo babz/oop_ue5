@@ -5,7 +5,7 @@ public interface AssocIter <Item, Assoc> extends Iter<Item>{
 	 *  ist null wenn noch kein Aufruf von next erfolgt ist oder 
 	 *  der letzte Aufruf von next ebenso null geliefert hat.
 	 */
-	public Assoc assoc();
+	public <T extends Assoc> T assoc();
 	
 	/* insert kann ein neues Element (an nicht n�her definierter 
 	 * Stelle und ohne Angabe assoziierter Objekte) in das Aggregat 

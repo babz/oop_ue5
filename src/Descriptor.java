@@ -1,8 +1,9 @@
-public abstract class Descriptor implements Comparable<Descriptor>{
+public abstract class Descriptor implements Comparable<Descriptor> {
 	
 	private String s;
 	
 	public Descriptor(String s){
+		this.s = s;
 	}
 	
 	public int compareTo(Descriptor d){

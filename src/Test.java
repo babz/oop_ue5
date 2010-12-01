@@ -73,8 +73,8 @@ public class Test{
 		
 		tree = new Tree<MyInt>();
 		//iterators for insertion
-		Tree<MyInt>.WideIterator i = tree.assoc();
-		Tree<MyInt>.WideIterator temp;
+		RecursiveIter<MyInt> i = tree.assoc();
+		RecursiveIter<MyInt> temp;
 		
 		i.insert(i4);
 		i.insert(i1);
@@ -148,39 +148,34 @@ public class Test{
 		BDescriptor b3 = new BDescriptor("aber nur mit Schlagobers");
 		BDescriptor b4 = new BDescriptor("aber jetzt");
 
-		/*
-		ValueTree<Descriptor> tree2;
-		ValueTree<Descriptor>.iterator i1 = tree2.assoc;
-		ValueTree<Descriptor>.iterator i2;
-		ValueTree<Descriptor>.iterator i3;
-		*/
+		
+		ValueTree<ADescriptor, BDescriptor> tree2 = new ValueTree<ADescriptor, BDescriptor>();
+		RecursiveValueIter<ADescriptor, BDescriptor> move = tree2.assoc();
+		
+		move.insert(a1);
+		move.insert(a2);
+		move.insert(a3);
+		move.next();
+		move.set(b1);
+		move.next();
+		move.set(b2);
+		
+		// second level
+		move = move.assoc();
+		move.insert(a4);
+		move.insert(a5);
+		move.next();
+		move.set(b3);
+		move.next();
+		move.set(b4);
+		move = tree2.assoc();
 		
 		info("<<<<<<<<<<<<<<<<<<<<<  2.ValueTree  >>>>>>>>>>>>>>>>>>>>>" + "\n" + "\n");
-		
-		
-		
 		//run through current branch & return a's & b's (wide search)
 		info("Testcase #" + runCount + ", testing assoc Iterator ...");
-
+		assert_(checkIter(tree2.allLabels(), a2, a3, a5, a4, null, a1));
 		info("... success");
 		info("-----------------------------------------------------------" + "\n");
-		
-		
-		
-		//run through complete tree & return a's & b's (depth search)
-		info("Testcase #" + runCount + ", testing assoc Iterator ...");
-
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
-		
-		
-		
-		//
-		info("Testcase #" + runCount + ", testing assoc Iterator ...");
-
-		info("... success");
-		info("-----------------------------------------------------------" + "\n");
-		
 		
 		
 		/* 3:

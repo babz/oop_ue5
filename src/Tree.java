@@ -9,7 +9,8 @@ import java.util.NoSuchElementException;
  * Je zwei Iteratoren haben unterschiedliche Identitäten, auch wenn sie über die vom selben 
  * Knoten ausgehenden Kanten iterieren.
  */
-public class Tree<Label extends Comparable<Label>> {
+
+public class Tree<Label extends Comparable<? super Label>> {
 	private class Children extends LinkedList<Child>{}
 	private class Child {
 		public Child(Label label) {
@@ -67,11 +68,28 @@ public class Tree<Label extends Comparable<Label>> {
 		}
 		
 	}
+
+	/*
+	 * retourniert einen Iterator des Typs AssocIter (mit geeigneten Typparameterersetzungen), 
+	 * der über die Label aller von der Wurzel des Baums ausgehenden Kanten in aufsteigender 
+	 * Reihenfolge (entsprechend compareTo) iteriert. Die Methode insert des Iterators fügt nur 
+	 * dann eine neue Kante mit einem neuen Label hinzu, wenn es vom selben Knoten aus noch keine 
+	 * Kante mit einem gleichen Label (entsprechend compareTo) gibt. Die über den Iterator zugänglichen 
+	 * assoziierten Objekte entsprechen Iteratoren des Typs AssocIter, welche (so wie hier für den 
+	 * Wurzelknoten beschrieben) über die Label der Kanten iterieren, die von dem Knoten ausgehen, 
+	 * der über die Kante erreichbar ist, dessen Label zuletzt von next zurückgegeben wurde. 
+	 * Jeder Aufruf von assoc (sowohl in Instanzen von Tree als auch in Iteratoren) erzeugt einen 
+	 * neuen Iterator.
+	 */
+	public RecursiveIter<Label> assoc(){
+		// accepting a cast here, since it's a factory method
+		return new WideIterator(root.subChildren);
+	}
 	
-	class WideIterator implements AssocIter<Label, WideIterator> {
+	private class WideIterator implements RecursiveIter<Label> {
 		Children here;
 		Children.Iterator pos;
-		public WideIterator(Children c) {
+		private WideIterator(Children c) {
 			here = c;
 			pos = c.iterate();
 		}
@@ -86,7 +104,7 @@ public class Tree<Label extends Comparable<Label>> {
 		}
 
 		@Override
-		public WideIterator assoc() {
+		public RecursiveIter<Label> assoc() {
 			Child c = pos.get();
 			if(c == null) {
 				return null;
@@ -113,22 +131,7 @@ public class Tree<Label extends Comparable<Label>> {
 		public boolean delete() {
 			return pos.delete();
 		}
-	}
 
-	/*
-	 * retourniert einen Iterator des Typs AssocIter (mit geeigneten Typparameterersetzungen), 
-	 * der über die Label aller von der Wurzel des Baums ausgehenden Kanten in aufsteigender 
-	 * Reihenfolge (entsprechend compareTo) iteriert. Die Methode insert des Iterators fügt nur 
-	 * dann eine neue Kante mit einem neuen Label hinzu, wenn es vom selben Knoten aus noch keine 
-	 * Kante mit einem gleichen Label (entsprechend compareTo) gibt. Die über den Iterator zugänglichen 
-	 * assoziierten Objekte entsprechen Iteratoren des Typs AssocIter, welche (so wie hier für den 
-	 * Wurzelknoten beschrieben) über die Label der Kanten iterieren, die von dem Knoten ausgehen, 
-	 * der über die Kante erreichbar ist, dessen Label zuletzt von next zurückgegeben wurde. 
-	 * Jeder Aufruf von assoc (sowohl in Instanzen von Tree als auch in Iteratoren) erzeugt einen 
-	 * neuen Iterator.
-	 */
-	public WideIterator assoc(){
-		return new WideIterator(root.subChildren);
 	}
 	
 	/*

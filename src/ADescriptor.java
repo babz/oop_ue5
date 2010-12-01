@@ -1,4 +1,4 @@
-public class ADescriptor extends Descriptor{	
+public class ADescriptor extends Descriptor {	
 	public ADescriptor(String s){
 		super(s);
 	}

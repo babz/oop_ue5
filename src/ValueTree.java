@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
  * kein Wert für einen Knoten über set im Iterator gesetzt, so ist der Wert null. Wenn möglich soll 
  * ValueTree mit geeigneten Typparameterersetzungen Untertyp von Tree sein.
  */
-public class ValueTree<Label extends Comparable<Label>, Value> extends Tree<Label> {
+
+public class ValueTree<Label extends Comparable<? super Label>, Value> extends Tree<Label> {
 	protected class Children extends LinkedList<Child> {}
 	protected class Child {
 		private Label label;
@@ -19,10 +20,16 @@ public class ValueTree<Label extends Comparable<Label>, Value> extends Tree<Labe
 			subChildren = new Children();
 		}
 	}
-	protected class WideIterator implements ValueIter<Label, WideIterator, Value> {
+	private Child root = new Child(null, null);
+
+	public RecursiveValueIter<Label, Value> assoc() {
+		return new WideIterator(root.subChildren);
+	}
+
+	private class WideIterator implements RecursiveValueIter<Label, Value> {
 		Children here;
 		Children.Iterator pos;
-		public WideIterator (Children c) {
+		private WideIterator (Children c) {
 			here = c;
 			pos = c.iterate();
 		}
@@ -37,7 +44,7 @@ public class ValueTree<Label extends Comparable<Label>, Value> extends Tree<Labe
 		}
 
 		@Override
-		public WideIterator assoc() {
+		public RecursiveValueIter<Label, Value> assoc() {
 			Child c = pos.get();
 			if(c == null) {
 				return null;
@@ -79,5 +86,53 @@ public class ValueTree<Label extends Comparable<Label>, Value> extends Tree<Labe
 			}
 			return null;
 		}
+	}
+
+	class DeepIterator extends Tree<Label>.DeepIterator {
+		private class Stack extends LinkedList<Children.Iterator>{}
+		private Stack stack = new Stack();
+		private Stack.Iterator sp = stack.iterate();
+		public DeepIterator() {
+			sp.insert(root.subChildren.iterate());
+		}
+
+		@Override
+		public boolean hasNext() {
+			// first entry (top) of stack
+			Stack.Iterator tos = sp.copy();
+			Children.Iterator here = tos.next();
+
+			// if we're not on base level, we have at least null to return next
+			if (tos.hasNext()) return true;
+
+			// also if we have at least one more node horizontally
+			if (here.hasNext()) return true;
+
+			// item has no children
+			return false;
+		}
+
+		@Override
+		public Label next() throws NoSuchElementException {
+			Stack.Iterator tos = sp.copy();
+			Children.Iterator here = tos.next();
+			if (here.hasNext()) {
+				Child item = here.next();
+				Children.Iterator sub = item.subChildren.iterate();
+				if (sub.hasNext()) {
+					sp.insert(sub);
+				}
+				return item.label;
+			} else {
+				if ( ! tos.hasNext()) {
+					throw new NoSuchElementException("Tree iterator depleted");
+				}
+				tos.delete();
+				return null;
+			}
+		}
+	}
+	public DeepIterator allLabels(){
+		return new DeepIterator();
 	}
 }
